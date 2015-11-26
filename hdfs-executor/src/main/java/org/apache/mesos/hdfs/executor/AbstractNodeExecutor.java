@@ -31,10 +31,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * The base for several types of HDFS executors.  It also contains the main which is consistent for all executors.
@@ -235,6 +233,35 @@ public abstract class AbstractNodeExecutor implements Executor {
       "-Xmx" + config.getNodeConfig(HDFSConstants.DATA_NODE_ID).getMaxHeap() + "m -Xms" +
         config.getNodeConfig(HDFSConstants.DATA_NODE_ID).getMaxHeap() + "m");
 
+    envMap.put("MESOS_HDFS_MESOSDNS", Boolean.toString(config.usingMesosDns()));
+    envMap.put("MESOS_HDFS_MESOSDNS_DOMAIN", config.getMesosDnsDomain());
+    envMap.put("MESOS_HDFS_CONFIG_PATH", config.getConfigPath());
+    envMap.put("MESOS_HDFS_HADOOP_HEAP_SIZE", Integer.toString(config.getHadoopHeapSize()));
+    envMap.put("MESOS_HDFS_DATANODE_HEAP_SIZE", Integer.toString(config.getTaskHeapSize("datanode")));
+    envMap.put("MESOS_HDFS_NAMENODE_HEAP_SIZE", Integer.toString(config.getTaskHeapSize("namenode")));
+    envMap.put("MESOS_HDFS_EXECUTOR_HEAP_SIZE", Integer.toString(config.getExecutorHeap()));
+    envMap.put("MESOS_HDFS_JVM_OVERHEAD", Double.toString(config.getJvmOverhead()));
+    envMap.put("MESOS_HDFS_EXECUTOR_CPUS", Double.toString(config.getExecutorCpus()));
+    envMap.put("MESOS_HDFS_NAMENODE_CPUS", Double.toString(config.getTaskCpus("namenode")));
+    envMap.put("MESOS_HDFS_JOURNALNODE_CPUS", Double.toString(config.getTaskCpus("jouralnode")));
+    envMap.put("MESOS_HDFS_DATANODE_CPUS", Double.toString(config.getTaskCpus("datanode")));
+    envMap.put("MESOS_HDFS_JOURNALNODE_COUNT", Double.toString(config.getJournalNodeCount()));
+    envMap.put("MESOS_HDFS_FRAMEWORK_NAME", config.getFrameworkName());
+    envMap.put("MESOS_HDFS_USER", config.getHdfsUser());
+    envMap.put("MESOS_HDFS_ROLE", config.getHdfsRole());
+    envMap.put("MESOS_HDFS_DATA_DIRS", config.getDataDir());
+    envMap.put("MESOS_HDFS_DOMAIN_SOCKET_DIR", config.getDomainSocketDir());
+    envMap.put("MESOS_HDFS_BACKUP_DIR", config.getBackupDir());
+    envMap.put("MESOS_HDFS_ZKFC_HA_ZOOKEEPER_QUORUM", config.getHaZookeeperQuorum());
+    envMap.put("MESOS_HDFS_STATE_ZK", config.getStateZkServers());
+    envMap.put("MESOS_HDFS_STATE_ZK_TIMEOUT_MS", Integer.toString(config.getStateZkTimeout()));
+    envMap.put("MESOS_HDFS_FRAMEWORK_MNT_PATH", config.getFrameworkMountPath());
+    envMap.put("MESOS_HDFS_DEADNODE_TIMEOUT_SEC", Integer.toString(config.getDeadNodeTimeout()));
+
+    envMap.put("MESOS_MASTER_URI", config.getMesosMasterUri());
+    envMap.put("MESOS_HDFS_ZKFC_HA_ZOOKEEPER_QUORUM", config.getHaZookeeperQuorum());
+    envMap.put("MESOS_HDFS_STATE_ZK", config.getStateZkServers());
+    envMap.put("MESOS_HDFS_DATANODE_EXCLUSIVE", Boolean.toString(config.getRunDatanodeExclusively()));
     return envMap;
   }
 

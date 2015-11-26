@@ -156,7 +156,7 @@ public class HdfsFrameworkConfig {
     return getConf().get("mesos.hdfs.config.path", "etc/hadoop/hdfs-site.xml");
   }
 
-  private int getHadoopHeapSize() {
+  public int getHadoopHeapSize() {
     return getConf().getInt("mesos.hdfs.hadoop.heap.size", DEFAULT_HADOOP_HEAP_SIZE);
   }
 
@@ -180,7 +180,7 @@ public class HdfsFrameworkConfig {
     return getHadoopHeapSize();
   }
 
-  private int getTaskHeapSize(String taskName) {
+  public int getTaskHeapSize(String taskName) {
     int size;
     switch (taskName) {
       case "zkfc":
@@ -243,7 +243,7 @@ public class HdfsFrameworkConfig {
     return getConf().getDouble("mesos.hdfs.datanode.cpus", DEFAULT_DATANODE_CPUS);
   }
 
-  private double getTaskCpus(String taskName) {
+  public double getTaskCpus(String taskName) {
     double cpus = DEFAULT_CPUS;
     switch (taskName) {
       case "zkfc":

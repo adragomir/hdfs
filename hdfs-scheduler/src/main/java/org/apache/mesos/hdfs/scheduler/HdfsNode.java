@@ -1,5 +1,6 @@
 package org.apache.mesos.hdfs.scheduler;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mesos.Protos.CommandInfo;
@@ -21,10 +22,7 @@ import org.apache.mesos.protobuf.ExecutorInfoBuilder;
 import org.apache.mesos.protobuf.ResourceBuilder;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -117,9 +115,14 @@ public abstract class HdfsNode implements IOfferEvaluator, ILauncher {
   }
 
   protected List<Environment.Variable> getExecutorEnvironment() {
-    List<Environment.Variable> env = EnvironmentBuilder.
-      createEnvironment(MapUtil.propertyMapFilter(System.getProperties(),
+    Map<String, String> envMap = new HashMap<String, String>();
+    envMap.putAll(MapUtil.propertyMapFilter(System.getProperties(),
         new StartsWithPredicate(HDFSConstants.PROPERTY_VAR_PREFIX)));
+    envMap.putAll(Maps.filterKeys(System.getenv(),
+        new StartsWithPredicate(HDFSConstants.PROPERTY_VAR_PREFIX)));
+    envMap.putAll(Maps.filterKeys(System.getenv(),
+        new StartsWithPredicate("MESOS_MASTER")));
+    List<Environment.Variable> env = EnvironmentBuilder.createEnvironment(envMap);
     env.add(EnvironmentBuilder.createEnvironment("LD_LIBRARY_PATH", config.getLdLibraryPath()));
     env.add(EnvironmentBuilder.createEnvironment("EXECUTOR_OPTS", "-Xmx"
       + config.getExecutorHeap() + "m -Xms" + config.getExecutorHeap() + "m"));
