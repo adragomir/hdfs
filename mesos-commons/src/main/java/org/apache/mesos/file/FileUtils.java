@@ -16,6 +16,11 @@ public final class FileUtils {
   private FileUtils() {
   }
 
+  public static void createDirs(File[] dataDirs) {
+    for (File dir: dataDirs) {
+      createDir(dir);
+    }
+  }
   public static void createDir(File dataDir) {
     if (dataDir.exists()) {
       LOG.info("data dir exits:" + dataDir);

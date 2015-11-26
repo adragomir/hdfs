@@ -293,11 +293,7 @@ public class HdfsFrameworkConfig {
   }
 
   public String getDataDir() {
-    return getConf().get("mesos.hdfs.data.dir", "/var/lib/hdfs/data");
-  }
-
-  public String getSecondaryDataDir() {
-    return getConf().get("mesos.hdfs.secondary.data.dir");
+    return getConf().get("mesos.hdfs.data.dirs", "/var/lib/hdfs/data");
   }
 
   public String getDomainSocketDir() {

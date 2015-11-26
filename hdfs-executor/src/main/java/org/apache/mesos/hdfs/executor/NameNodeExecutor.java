@@ -273,7 +273,9 @@ public class NameNodeExecutor extends AbstractNodeExecutor {
   }
 
   private void initDir() {
-    File nameDir = new File(config.getDataDir() + "/name");
+    File[] dataDirs = parseDataDirs(config.getDataDir());
+
+    File nameDir = new File(dataDirs[0] + "/name");
     FileUtils.deleteDirectory(nameDir);
     if (!nameDir.mkdirs()) {
       final String errorMsg = "unable to make directory: " + nameDir;

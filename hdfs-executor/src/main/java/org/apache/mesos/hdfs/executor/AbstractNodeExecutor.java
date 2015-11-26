@@ -80,14 +80,17 @@ public abstract class AbstractNodeExecutor implements Executor {
    */
   private void setUpDataDir() {
     // Create primary data dir if it does not exist
-    File dataDir = new File(config.getDataDir());
-    FileUtils.createDir(dataDir);
+    File[] dataDirs = parseDataDirs(config.getDataDir());
+    FileUtils.createDirs(dataDirs);
+  }
 
-    // Create secondary data dir if it does not exist
-    if (config.getSecondaryDataDir() != null) {
-      File secondaryDataDir = new File(config.getSecondaryDataDir());
-      FileUtils.createDir(secondaryDataDir);
+  protected File[] parseDataDirs(String dataDirs) {
+    String[] splitted = dataDirs.split(",");
+    File[] out = new File[splitted.length];
+    for (int i = 0; i < splitted.length; i++) {
+      out[i] = new File(splitted[i]);
     }
+    return out;
   }
 
   /**
