@@ -243,7 +243,7 @@ public abstract class AbstractNodeExecutor implements Executor {
     envMap.put("MESOS_HDFS_JVM_OVERHEAD", Double.toString(config.getJvmOverhead()));
     envMap.put("MESOS_HDFS_EXECUTOR_CPUS", Double.toString(config.getExecutorCpus()));
     envMap.put("MESOS_HDFS_NAMENODE_CPUS", Double.toString(config.getTaskCpus("namenode")));
-    envMap.put("MESOS_HDFS_JOURNALNODE_CPUS", Double.toString(config.getTaskCpus("jouralnode")));
+    envMap.put("MESOS_HDFS_JOURNALNODE_CPUS", Double.toString(config.getTaskCpus("journalnode")));
     envMap.put("MESOS_HDFS_DATANODE_CPUS", Double.toString(config.getTaskCpus("datanode")));
     envMap.put("MESOS_HDFS_JOURNALNODE_COUNT", Double.toString(config.getJournalNodeCount()));
     envMap.put("MESOS_HDFS_FRAMEWORK_NAME", config.getFrameworkName());
